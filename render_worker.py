@@ -22,6 +22,7 @@ def run_worker():
     parser.add_argument("--fps", type=int, default=30, help="Output FPS")
     parser.add_argument("--quality", default="HIGH", help="Video quality (HIGH, MEDIUM, LOW, VERYLOW)")
     parser.add_argument("--codec", default="H264", help="Video codec (H264, H265)")
+    parser.add_argument("--delete-images", action="store_true", help="Delete source image files after successful MP4 render")
 
     parsed = parser.parse_args(worker_args)
     output_dir = parsed.dir
@@ -114,7 +115,23 @@ def run_worker():
 
     print(f"[SmartTimelapse Worker] Rendering animation to {mp4_out}...")
     bpy.ops.render.render(animation=True)
-    print("[SmartTimelapse Worker] Render completed successfully!")
+
+    if os.path.exists(mp4_out) and os.path.getsize(mp4_out) > 0:
+        print("[SmartTimelapse Worker] Render completed successfully!")
+        if parsed.delete_images:
+            print(f"[SmartTimelapse Worker] Cleaning up {len(image_names)} source image files...")
+            cleaned = 0
+            for img_name in image_names:
+                img_path = os.path.join(output_dir, img_name)
+                try:
+                    os.remove(img_path)
+                    cleaned += 1
+                except Exception as e:
+                    print(f"[SmartTimelapse Worker] Failed to remove {img_path}: {e}")
+            print(f"[SmartTimelapse Worker] Cleaned up {cleaned} image files successfully.")
+    else:
+        print("[SmartTimelapse Worker] Error: Output MP4 was not created or empty!")
+        sys.exit(1)
 
 if __name__ == "__main__":
     run_worker()

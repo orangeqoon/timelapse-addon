@@ -57,6 +57,12 @@ class SmartTimelapsePreferences(bpy.types.AddonPreferences):
         default='H264'
     )
 
+    default_delete_images: bpy.props.BoolProperty(
+        name="Default Delete Images after MP4",
+        description="Default setting to delete raw images after successful MP4 generation to save storage",
+        default=True
+    )
+
     ignore_anim_playback: bpy.props.BoolProperty(
         name="Ignore Animation Playback for Idle",
         description="Do not treat animation playback as user activity to avoid false recordings while previewing",
@@ -73,6 +79,7 @@ class SmartTimelapsePreferences(bpy.types.AddonPreferences):
         box.prop(self, "default_fps")
         box.prop(self, "video_quality")
         box.prop(self, "video_codec")
+        box.prop(self, "default_delete_images")
         box.prop(self, "ignore_anim_playback")
 
 

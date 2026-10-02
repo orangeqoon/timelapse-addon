@@ -147,6 +147,10 @@ def start_async_mp4_render(scene):
         "--codec", codec
     ]
 
+    delete_images = getattr(scene.smart_timelapse, "delete_images_after_export", True)
+    if delete_images:
+        cmd.append("--delete-images")
+
     try:
         _active_render_process = subprocess.Popen(
             cmd,

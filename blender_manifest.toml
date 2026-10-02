@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "timelapse_addon"
-version = "1.0.0"
+version = "1.1.0"
 name = "TIMELAPSE Addon"
 tagline = "Lag-free timelapse recording with smart delay & MP4 export"
 maintainer = "orangeqoon"

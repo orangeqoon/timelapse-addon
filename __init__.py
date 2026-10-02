@@ -1,7 +1,7 @@
 bl_info = {
     "name": "TIMELAPSE Addon",
     "author": "orangeqoon",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "blender": (5, 2, 0),
     "location": "View3D > Header / Sidebar > Timelapse",
     "description": "Smart timelapse recording with viewport capture, idle pause, and MP4 export",
@@ -141,6 +141,12 @@ class SmartTimelapseSettings(bpy.types.PropertyGroup):
             ('H265', "H.265 / HEVC (High Efficiency)", "Next-gen codec, 40-50% smaller file size for modern players")
         ],
         default='H264'
+    )
+
+    delete_images_after_export: bpy.props.BoolProperty(
+        name="Delete Images after MP4",
+        description="Automatically remove captured JPEG/PNG frames once MP4 video is created to save disk space. Uncheck if you want to keep raw images.",
+        default=True
     )
 
 

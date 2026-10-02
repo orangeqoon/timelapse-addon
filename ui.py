@@ -101,6 +101,7 @@ class SMART_TIMELAPSE_PT_quick_settings(bpy.types.Panel):
         box_out.prop(settings, "video_quality")
         box_out.prop(settings, "video_codec")
         box_out.prop(settings, "auto_mp4")
+        box_out.prop(settings, "delete_images_after_export")
 
         row_exp = box_out.row()
         if video_export.is_rendering():
@@ -184,6 +185,7 @@ class SMART_TIMELAPSE_PT_main_panel(bpy.types.Panel):
         box_vse.prop(settings, "video_quality")
         box_vse.prop(settings, "video_codec")
         box_vse.prop(settings, "auto_mp4")
+        box_vse.prop(settings, "delete_images_after_export")
 
         # Estimated video length
         if count > 0 and settings.fps > 0:
