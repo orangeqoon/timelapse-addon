@@ -20,7 +20,8 @@ def run_worker():
     parser.add_argument("--base", required=True, help="Base filename prefix")
     parser.add_argument("--out", required=True, help="Output MP4 file path")
     parser.add_argument("--fps", type=int, default=30, help="Output FPS")
-    parser.add_argument("--quality", default="HIGH", help="Video quality (HIGH, MEDIUM, LOW)")
+    parser.add_argument("--quality", default="HIGH", help="Video quality (HIGH, MEDIUM, LOW, VERYLOW)")
+    parser.add_argument("--codec", default="H264", help="Video codec (H264, H265)")
 
     parsed = parser.parse_args(worker_args)
     output_dir = parsed.dir
@@ -28,6 +29,7 @@ def run_worker():
     mp4_out = parsed.out
     fps = parsed.fps
     quality = parsed.quality
+    codec = parsed.codec
 
     print(f"[SmartTimelapse Worker] Scanning for '{base_name}' sequence in {output_dir}...")
     pattern = re.compile(rf"^{re.escape(base_name)}_(\d+)\.(jpg|jpeg|png)$", re.IGNORECASE)
@@ -85,7 +87,7 @@ def run_worker():
         scene.render.image_settings.media_type = 'VIDEO'
     scene.render.image_settings.file_format = 'FFMPEG'
     scene.render.ffmpeg.format = 'MPEG4'
-    scene.render.ffmpeg.codec = 'H264'
+    scene.render.ffmpeg.codec = 'H265' if str(codec).upper() == 'H265' else 'H264'
 
     # Color management
     if hasattr(scene, "view_settings") and hasattr(scene.view_settings, "view_transform"):
@@ -94,13 +96,21 @@ def run_worker():
         except Exception:
             pass
 
-    # Video quality
-    if quality == 'HIGH':
-        scene.render.ffmpeg.constant_rate_factor = 'HIGH'
-    elif quality == 'MEDIUM':
+    # Video compression & quality (HandBrake-style CRF control)
+    quality_upper = str(quality).upper()
+    if quality_upper == 'VERYLOW':
+        scene.render.ffmpeg.constant_rate_factor = 'VERYLOW'
+    elif quality_upper == 'LOW':
+        scene.render.ffmpeg.constant_rate_factor = 'LOW'
+    elif quality_upper == 'MEDIUM':
         scene.render.ffmpeg.constant_rate_factor = 'MEDIUM'
     else:
-        scene.render.ffmpeg.constant_rate_factor = 'LOW'
+        scene.render.ffmpeg.constant_rate_factor = 'HIGH'
+
+    # Optimize GOP size (keyframe interval) for timelapses to maximize compression
+    scene.render.ffmpeg.gopsize = max(30, int(fps * 2))
+    if hasattr(scene.render.ffmpeg, "ffmpeg_preset"):
+        scene.render.ffmpeg.ffmpeg_preset = 'GOOD'
 
     print(f"[SmartTimelapse Worker] Rendering animation to {mp4_out}...")
     bpy.ops.render.render(animation=True)

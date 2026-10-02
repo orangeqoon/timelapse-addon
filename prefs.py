@@ -36,14 +36,25 @@ class SmartTimelapsePreferences(bpy.types.AddonPreferences):
     )
 
     video_quality: bpy.props.EnumProperty(
-        name="Video Quality",
-        description="Encoding quality for generated MP4 video",
+        name="Default Video Quality",
+        description="Encoding quality and compression level for exported MP4",
         items=[
-            ('HIGH', "High", "High quality / larger file size"),
-            ('MEDIUM', "Medium", "Balanced quality and file size"),
-            ('LOW', "Low", "Smaller file size")
+            ('HIGH', "High Quality", "Standard high quality / larger file size"),
+            ('MEDIUM', "Balanced", "Balanced quality and file size"),
+            ('LOW', "High Compression", "Compact file size (HandBrake equivalent)"),
+            ('VERYLOW', "Ultra Compact", "Maximum compression / smallest file size")
         ],
         default='HIGH'
+    )
+
+    video_codec: bpy.props.EnumProperty(
+        name="Default Video Codec",
+        description="Video encoding format",
+        items=[
+            ('H264', "H.264 (Universal)", "Universal compatibility across all devices and web"),
+            ('H265', "H.265 / HEVC (High Efficiency)", "40-50% smaller file size for modern devices")
+        ],
+        default='H264'
     )
 
     ignore_anim_playback: bpy.props.BoolProperty(
@@ -61,6 +72,7 @@ class SmartTimelapsePreferences(bpy.types.AddonPreferences):
         box.prop(self, "default_idle_timeout")
         box.prop(self, "default_fps")
         box.prop(self, "video_quality")
+        box.prop(self, "video_codec")
         box.prop(self, "ignore_anim_playback")
 
 

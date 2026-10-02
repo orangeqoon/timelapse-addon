@@ -128,7 +128,8 @@ def start_async_mp4_render(scene):
         return False, f"Render worker script missing at {worker_script}"
 
     p = prefs.get_preferences()
-    quality = p.video_quality if p else 'HIGH'
+    quality = getattr(scene.smart_timelapse, "video_quality", p.video_quality if p else 'HIGH')
+    codec = getattr(scene.smart_timelapse, "video_codec", p.video_codec if p else 'H264')
 
     # Launch dedicated background worker with factory startup
     blender_bin = bpy.app.binary_path
@@ -142,7 +143,8 @@ def start_async_mp4_render(scene):
         "--base", base_name,
         "--out", mp4_out_path,
         "--fps", str(scene.smart_timelapse.fps),
-        "--quality", quality
+        "--quality", quality,
+        "--codec", codec
     ]
 
     try:

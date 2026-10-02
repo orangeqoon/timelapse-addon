@@ -98,6 +98,8 @@ class SMART_TIMELAPSE_PT_quick_settings(bpy.types.Panel):
 
         box_out.separator()
         box_out.prop(settings, "fps")
+        box_out.prop(settings, "video_quality")
+        box_out.prop(settings, "video_codec")
         box_out.prop(settings, "auto_mp4")
 
         row_exp = box_out.row()
@@ -179,6 +181,8 @@ class SMART_TIMELAPSE_PT_main_panel(bpy.types.Panel):
         box_vse = layout.box()
         box_vse.label(text="MP4 Video Export", icon='FILE_MOVIE')
         box_vse.prop(settings, "fps")
+        box_vse.prop(settings, "video_quality")
+        box_vse.prop(settings, "video_codec")
         box_vse.prop(settings, "auto_mp4")
 
         # Estimated video length

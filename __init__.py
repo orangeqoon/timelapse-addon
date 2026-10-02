@@ -121,6 +121,28 @@ class SmartTimelapseSettings(bpy.types.PropertyGroup):
         max=120
     )
 
+    video_quality: bpy.props.EnumProperty(
+        name="Compression / Quality",
+        description="Encoding quality and compression level",
+        items=[
+            ('HIGH', "High Quality", "Standard high quality (larger file size)"),
+            ('MEDIUM', "Balanced", "Balanced quality and compression"),
+            ('LOW', "High Compression", "Compact file size (HandBrake style compression)"),
+            ('VERYLOW', "Ultra Compact", "Maximum compression, smallest file size")
+        ],
+        default='HIGH'
+    )
+
+    video_codec: bpy.props.EnumProperty(
+        name="Video Codec",
+        description="Video encoding format",
+        items=[
+            ('H264', "H.264 (Universal)", "Standard compatibility for all browsers, devices and platforms"),
+            ('H265', "H.265 / HEVC (High Efficiency)", "Next-gen codec, 40-50% smaller file size for modern players")
+        ],
+        default='H264'
+    )
+
 
 def _timelapse_timer_callback():
     global _timer_registered, _last_capture_time
