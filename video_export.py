@@ -115,7 +115,7 @@ def start_async_mp4_render(scene):
 
     output_dir = capture.get_resolved_output_dir(scene)
     base_name = scene.smart_timelapse.base_filename.strip() or "Timelapse"
-    images = get_image_sequence_files(output_dir, base_name, "png")
+    images = get_image_sequence_files(output_dir, base_name)
 
     if not images:
         return False, f"No image sequence found for '{base_name}' in {output_dir}"
