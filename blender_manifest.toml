@@ -1,0 +1,34 @@
+schema_version = "1.0.0"
+
+id = "timelapse_addon"
+version = "1.0.0"
+name = "TIMELAPSE Addon"
+tagline = "Lag-free timelapse recording with smart delay & MP4 export"
+maintainer = "orangeqoon"
+type = "add-on"
+tags = ["System", "Render"]
+website = "https://github.com/orangeqoon/timelapse-addon"
+
+blender_version_min = "5.2.0"
+
+license = [
+    "SPDX:GPL-3.0-or-later",
+]
+
+copyright = [
+    "2026 orangeqoon",
+    "2020-2024 Blender Foundation, Antonio Vazquez (Original Timelapse Extension)",
+]
+
+[permissions]
+files = "Save screenshots and rendered MP4 video to disk"
+
+[build]
+paths_exclude_pattern = [
+    "__pycache__/",
+    ".*",
+    "/*.zip",
+    "dist/",
+    "spike_test.py",
+]
+
